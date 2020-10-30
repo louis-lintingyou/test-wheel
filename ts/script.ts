@@ -85,8 +85,8 @@ const btnDOM = document.querySelector('#btn');
 const listDOM = document.querySelector('#list');
 const ratiosDOM = document.querySelector('#ratios');
 
+let setTimeoutEvent = null;
 inputDOM.addEventListener('input', (e: InputEvent) => {
-    let setTimeoutEvent = null;
     edited = false;
     if (setTimeoutEvent) {
         clearTimeout(setTimeoutEvent);
@@ -100,7 +100,9 @@ inputDOM.addEventListener('input', (e: InputEvent) => {
             edited = true;
             return;
         }
-
+        inputValue = Math.max(Math.min(inputValue, 100), 1);
+        (e.target as HTMLInputElement).value = inputValue + '';
+        
         if (oldRatiosList.length <= inputValue) {
             ratiosList = [...oldRatiosList]
             inputValue = inputValue - oldRatiosList.length;
@@ -148,7 +150,7 @@ let isTexting = false;
 let clickTimeout = null;
 
 function clickFn() {
-
+    listDOM.innerHTML= '計算中...';
     if (clickTimeout) {
         clearTimeout(clickTimeout);
     }
@@ -158,21 +160,22 @@ function clickFn() {
         }, 50);
         return;
     }
-
+    
     console.clear();
     listDOM.innerHTML = '';
     errorList.length = 0;
-    if (isTexting && !ratiosList.length) {
+    if (isTexting || !ratiosList.length) {
+        listDOM.innerHTML = '請輸入有效數字';
         return;
     }
     isTexting = true;
     ratiosList.forEach((_, i) => {
         rotateFn(i);
     });
-
+    
     if (!errorList.length) {
         const div = document.createElement('div');
-        div.textContent = `無`;
+        div.textContent = `此獎項數量與比例可安心使用`;
         listDOM.appendChild(div);
     } else {
         errorList.forEach(data => {

@@ -72,8 +72,8 @@ var inputDOM = document.querySelector('#input');
 var btnDOM = document.querySelector('#btn');
 var listDOM = document.querySelector('#list');
 var ratiosDOM = document.querySelector('#ratios');
+var setTimeoutEvent = null;
 inputDOM.addEventListener('input', function (e) {
-    var setTimeoutEvent = null;
     edited = false;
     if (setTimeoutEvent) {
         clearTimeout(setTimeoutEvent);
@@ -87,6 +87,8 @@ inputDOM.addEventListener('input', function (e) {
             edited = true;
             return;
         }
+        inputValue = Math.max(Math.min(inputValue, 100), 1);
+        e.target.value = inputValue + '';
         if (oldRatiosList.length <= inputValue) {
             ratiosList = __spreadArrays(oldRatiosList);
             inputValue = inputValue - oldRatiosList.length;
@@ -132,6 +134,7 @@ inputDOM.addEventListener('input', function (e) {
 var isTexting = false;
 var clickTimeout = null;
 function clickFn() {
+    listDOM.innerHTML = '計算中...';
     if (clickTimeout) {
         clearTimeout(clickTimeout);
     }
@@ -144,7 +147,8 @@ function clickFn() {
     console.clear();
     listDOM.innerHTML = '';
     errorList.length = 0;
-    if (isTexting && !ratiosList.length) {
+    if (isTexting || !ratiosList.length) {
+        listDOM.innerHTML = '請輸入有效數字';
         return;
     }
     isTexting = true;
@@ -153,7 +157,7 @@ function clickFn() {
     });
     if (!errorList.length) {
         var div = document.createElement('div');
-        div.textContent = "\u7121";
+        div.textContent = "\u6B64\u734E\u9805\u6578\u91CF\u8207\u6BD4\u4F8B\u53EF\u5B89\u5FC3\u4F7F\u7528";
         listDOM.appendChild(div);
     }
     else {

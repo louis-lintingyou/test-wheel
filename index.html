@@ -16,33 +16,39 @@
 
 <body>
     <div class="body">
-        <div class="input-container">
-            <input
-                id="input"
-                class="input"
-                type="number"
-                min="1"
-                placeholder="請輸入獎項數量"
-            >
+        <div class="center-container">
+            <div class="input-container">
+                <input
+                    id="input"
+                    class="input"
+                    type="number"
+                    min="1"
+                    max="100"
+                    placeholder="請輸入獎項數量"
+                >
+            </div>
+    
+            <div class="ratios-container">
+                <div class="title">比例設定</div>
+                <div
+                    id="ratios"
+                    class="ratios-setting"
+                >
+                    <!-- <div>1： <input type="number" min="1" max="10"></div> -->
+                </div>
+            </div>
             <div
                 id="btn"
                 class="btn"
             >測試</div>
-        </div>
-
-        <div class="ratios-container">
-            <div class="title">比例設定</div>
-            <div id="ratios" class="ratios-setting">
-                <!-- <div>1： <input type="number" min="1" max="10"></div> -->
-            </div>
-        </div>
-
-        <div class="list-container">
-            <div class="title">逆轉列表</div>
-            <div
-                id="list"
-                class="list"
-            >
+    
+            <div class="list-container">
+                <div class="title">逆轉列表</div>
+                <div
+                    id="list"
+                    class="list"
+                >
+                </div>
             </div>
         </div>
     </div>
