@@ -95,7 +95,7 @@ input[type=number] {
 .ratios-container .ratios-setting div:nth-child(4n) {
   margin-right: 0;
 }
-.ratios-container .ratios-setting div:nth-child(n+4) {
+.ratios-container .ratios-setting div:nth-child(n+5) {
   margin-top: 5px;
 }
 .ratios-container .ratios-setting div input {
