@@ -9,6 +9,7 @@ var errorList = [];
 var ratiosList = [];
 var stopTest = false;
 var actualTime;
+var edited = true;
 function initRotate(params) {
     params.animateStartTime = new Date().getTime();
     actualTime = params.animateStartTime;
@@ -73,6 +74,7 @@ var listDOM = document.querySelector('#list');
 var ratiosDOM = document.querySelector('#ratios');
 inputDOM.addEventListener('input', function (e) {
     var setTimeoutEvent = null;
+    edited = false;
     if (setTimeoutEvent) {
         clearTimeout(setTimeoutEvent);
     }
@@ -82,6 +84,7 @@ inputDOM.addEventListener('input', function (e) {
         ratiosList = [];
         ratiosDOM.innerHTML = '';
         if (!inputValue) {
+            edited = true;
             return;
         }
         if (oldRatiosList.length <= inputValue) {
@@ -107,6 +110,7 @@ inputDOM.addEventListener('input', function (e) {
             input.addEventListener('input', function (e) {
                 var ratiosValue = +e.target.value;
                 ratiosValue = Math.max(Math.min(ratiosValue, 10), 1);
+                edited = false;
                 if (innerSetTimeoutEvent) {
                     clearTimeout(innerSetTimeoutEvent);
                 }
@@ -115,16 +119,28 @@ inputDOM.addEventListener('input', function (e) {
                         ratiosList[i] = ratiosValue;
                     }
                     e.target.value = ratiosValue + '';
+                    edited = true;
                 }, 500);
             });
             div.textContent = i + 1 + "\uFF1A";
             div.appendChild(input);
             ratiosDOM.appendChild(div);
         });
+        edited = true;
     }, 500);
 });
 var isTexting = false;
-btnDOM.addEventListener('click', function () {
+var clickTimeout = null;
+function clickFn() {
+    if (clickTimeout) {
+        clearTimeout(clickTimeout);
+    }
+    if (!edited) {
+        clickTimeout = setTimeout(function () {
+            clickFn();
+        }, 50);
+        return;
+    }
     console.clear();
     listDOM.innerHTML = '';
     errorList.length = 0;
@@ -148,5 +164,8 @@ btnDOM.addEventListener('click', function () {
         });
     }
     isTexting = false;
+}
+btnDOM.addEventListener('click', function () {
+    clickFn();
 });
 //# sourceMappingURL=script.js.map

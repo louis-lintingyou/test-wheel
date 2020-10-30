@@ -18,6 +18,7 @@ let ratiosList = [];
 let stopTest = false;
 
 let actualTime
+let edited = true;
 function initRotate(params: Params): void {
     params.animateStartTime = new Date().getTime();
     actualTime = params.animateStartTime;
@@ -86,7 +87,7 @@ const ratiosDOM = document.querySelector('#ratios');
 
 inputDOM.addEventListener('input', (e: InputEvent) => {
     let setTimeoutEvent = null;
-
+    edited = false;
     if (setTimeoutEvent) {
         clearTimeout(setTimeoutEvent);
     }
@@ -96,6 +97,7 @@ inputDOM.addEventListener('input', (e: InputEvent) => {
         ratiosList = [];
         ratiosDOM.innerHTML = '';
         if (!inputValue) {
+            edited = true;
             return;
         }
 
@@ -121,6 +123,7 @@ inputDOM.addEventListener('input', (e: InputEvent) => {
             input.addEventListener('input', (e) => {
                 let ratiosValue = +(e.target as HTMLInputElement).value;
                 ratiosValue = Math.max(Math.min(ratiosValue, 10), 1);
+                edited = false;
                 if (innerSetTimeoutEvent) {
                     clearTimeout(innerSetTimeoutEvent);
                 }
@@ -129,18 +132,33 @@ inputDOM.addEventListener('input', (e: InputEvent) => {
                         ratiosList[i] = ratiosValue;
                     }
                     (e.target as HTMLInputElement).value = ratiosValue + '';
+                    edited = true;
                 }, 500);
             });
             div.textContent = `${i + 1}：`;
             div.appendChild(input);
             ratiosDOM.appendChild(div);
         });
+        edited = true;
     }, 500);
 });
 
 let isTexting = false;
 
-btnDOM.addEventListener('click', () => {
+let clickTimeout = null;
+
+function clickFn() {
+
+    if (clickTimeout) {
+        clearTimeout(clickTimeout);
+    }
+    if (!edited) {
+        clickTimeout = setTimeout(() => {
+            clickFn();
+        }, 50);
+        return;
+    }
+
     console.clear();
     listDOM.innerHTML = '';
     errorList.length = 0;
@@ -164,4 +182,9 @@ btnDOM.addEventListener('click', () => {
         });
     }
     isTexting = false;
+}
+
+
+btnDOM.addEventListener('click', () => {
+    clickFn();
 });
